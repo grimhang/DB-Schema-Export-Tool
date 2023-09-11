@@ -29,7 +29,8 @@ namespace DB_Schema_Export_Tool
         /// <summary>
         /// Pogo server
         /// </summary>
-        public const string SQL_SERVER_NAME_DEFAULT = "Pogo";
+        //public const string SQL_SERVER_NAME_DEFAULT = "Pogo";
+        public const string SQL_SERVER_NAME_DEFAULT = "127.0.0.1";
 
         /// <summary>
         /// User for connecting to Pogo
@@ -653,12 +654,23 @@ namespace DB_Schema_Export_Tool
                 return true;
             }
 
-            try
+            try  // Database 스크립팅 시작
             {
                 ShowTrace("Exporting non built-in schemas and roles");
 
                 var scriptInfo = CleanSqlScript(StringCollectionToList(currentDatabase.Script(scriptOptions)));
-                WriteTextToFile(workingParams.OutputDirectory, DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo);
+                //WriteTextToFile(workingParams.OutputDirectory, DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo);
+                WriteTextToFile(workingParams.OutputDirectory, "01_" + DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo);
+
+                // 내가 추가
+                foreach (Schema schema in currentDatabase.Schemas)
+                {
+                    scriptInfo = CleanSqlScript(StringCollectionToList(schema.Script(scriptOptions)));
+                    WriteTextToFile(workingParams.OutputDirectory, "02_" + DB_DEFINITION_FILE_PREFIX + schema.Name, scriptInfo);
+                }
+                
+                
+                
             }
             catch (Exception ex)
             {

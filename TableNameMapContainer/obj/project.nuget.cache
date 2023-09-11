@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "OFO8BRrqy2XZi4axOVvQH0kytH7lUkfTnmJRTW9Mw4kqtYQRc6jCc6BCvcoYP1B9R6f964HLd4U/CDEvpuMImw==",
+  "success": true,
+  "projectFilePath": "D:\\github\\DB-Schema-Export-Tool\\TableNameMapContainer\\TableNameMapContainer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ThinkDBA\\.nuget\\packages\\prism-library\\2.8.8\\prism-library.2.8.8.nupkg.sha512"
+  ],
+  "logs": []
+}

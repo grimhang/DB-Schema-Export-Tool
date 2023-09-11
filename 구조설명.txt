@@ -10,16 +10,25 @@ program.cs
 			
 		UpdateDatabaseList()
 			DBSchemaExportTool.GetServerDatabases()				
-				DBSchemaExporterSQLServer.GetServerDatabases()	-- DBSchemaExporterSQLServer.cs
-					GetServerDatabasesCurrentConnection() 		-- 2580 Line 디비명들 받아옴
-						GetSqlServerDatabasesWork()				-- 2600 Line
-						
-		ScriptDBSchemaObjects()
-			GetSelectedTableNamesForDataExport()				-- 선택한 테이블 리스트
-			StoreTableNamesToAutoExportData						-- 902 Line
-				StoreTableNameRegexToAutoExportData				-- DBSchemaExportTool.cs
-			UpdateSchemaExportOptions()
-			GetSelectedTableNamesForDataExport()				-- 870 Line
+				DBSchemaExporterSQLServer.GetServerDatabases()				-- DBSchemaExporterSQLServer.cs
+					GetServerDatabasesCurrentConnection() 					-- 2580 Line 디비명들 받아옴
+						GetSqlServerDatabasesWork()							-- 2600 Line
+									
+		ScriptDBSchemaObjects()			
+			ScriptDBSchemaObjectsThread()			
+				ScriptServerAndDBObjects()									-- DBSchemaExportTool.cs
+					ScriptServerAndDBObjectsWork()			
+						ScriptServerAndDBObjects							-- DBSchemaExporterBase.cs
+							ScriptDBObjectsAndData()			
+								ExportDBObjectsAndTableData					-- DBSchemaExporterSQLServer.cs
+									ExportDBObjectsUsingSMO
+										AutoSelectTablesForDataExport()
+											ExportDBObjectsUsingSMO()
+			GetSelectedTableNamesForDataExport()							-- 선택한 테이블 리스트
+			StoreTableNamesToAutoExportData									-- 902 Line
+				StoreTableNameRegexToAutoExportData							-- DBSchemaExportTool.cs
+			UpdateSchemaExportOptions()			
+			GetSelectedTableNamesForDataExport()							-- 870 Line
 				StripRowCountsFromTableNames(selectedTableNames);
 					ExportDBObjectsWork()
 						ExportDBSchemasAndRoles

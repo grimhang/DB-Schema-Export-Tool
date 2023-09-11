@@ -838,6 +838,7 @@ namespace DB_Schema_Export_Tool
                 return;
             }
 
+            // output 디렉토리 체크
             try
             {
                 // Validate txtOutputDirectoryPath.Text
@@ -888,7 +889,7 @@ namespace DB_Schema_Export_Tool
             {
                 MessageBox.Show("Error determining list of databases (and tables) to process: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
-            }
+            }   //선택된 테이블리스트
 
             try
             {
@@ -1057,10 +1058,11 @@ namespace DB_Schema_Export_Tool
                     }
                 }
 
-                Width = 600;
+                Width = 1000;   // 초기 화면 width
                 Height = 600;
 
-                txtServerName.Text = DBSchemaExporterSQLServer.SQL_SERVER_NAME_DEFAULT;
+                if (string.IsNullOrEmpty(txtServerName.Text))   // 2023-09-11  텍스트박스가 비어있을때만 디폰트이름으로 한다
+                    txtServerName.Text = DBSchemaExporterSQLServer.SQL_SERVER_NAME_DEFAULT;
 
                 chkUseIntegratedAuthentication.Checked = true;
                 chkPostgreSQL.Checked = false;

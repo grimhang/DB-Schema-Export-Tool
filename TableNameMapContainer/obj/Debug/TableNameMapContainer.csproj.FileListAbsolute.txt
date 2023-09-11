@@ -1,0 +1,8 @@
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\bin\TableNameMapContainer.dll
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\bin\TableNameMapContainer.pdb
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\bin\PRISM.dll
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\obj\Debug\TableNameMapContainer.csproj.AssemblyReference.cache
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\obj\Debug\TableNameMapContainer.csproj.CoreCompileInputs.cache
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\obj\Debug\TableNameMapContainer.csproj.CopyComplete
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\obj\Debug\TableNameMapContainer.dll
+D:\github\DB-Schema-Export-Tool\TableNameMapContainer\obj\Debug\TableNameMapContainer.pdb
