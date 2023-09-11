@@ -1,0 +1,26 @@
+program.cs
+	Application.Run(new frmMain())	-- 77 Line
+	
+	frmMain
+		생성자 InitializeControls(); -- 23 Line
+		
+		InitializeControls
+			ResetToDefaults(false)	-- 753 Line		무조건 처음 실행되는데 xml설정을 읽기때문에 필요없는게 아닌가?
+			xml파일 없으면 xml파일 생서
+			
+		UpdateDatabaseList()
+			DBSchemaExportTool.GetServerDatabases()				
+				DBSchemaExporterSQLServer.GetServerDatabases()	-- DBSchemaExporterSQLServer.cs
+					GetServerDatabasesCurrentConnection() 		-- 2580 Line 디비명들 받아옴
+						GetSqlServerDatabasesWork()				-- 2600 Line
+						
+		ScriptDBSchemaObjects()
+			GetSelectedTableNamesForDataExport()				-- 선택한 테이블 리스트
+			StoreTableNamesToAutoExportData						-- 902 Line
+				StoreTableNameRegexToAutoExportData				-- DBSchemaExportTool.cs
+			UpdateSchemaExportOptions()
+			GetSelectedTableNamesForDataExport()				-- 870 Line
+				StripRowCountsFromTableNames(selectedTableNames);
+					ExportDBObjectsWork()
+						ExportDBSchemasAndRoles
+						
