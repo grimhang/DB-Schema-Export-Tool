@@ -7349,9 +7349,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\github\\DB-Schema-Export-Tool\\DB_Schema_Export_Tool_Console.csproj",
-      "projectName": "DB_Schema_Export_Tool",
-      "projectPath": "D:\\github\\DB-Schema-Export-Tool\\DB_Schema_Export_Tool_Console.csproj",
+      "projectUniqueName": "D:\\github\\DB-Schema-Export-Tool\\DB_Schema_Export_Tool.csproj",
+      "projectName": "DB_Schema_Export_Tool_GUI",
+      "projectPath": "D:\\github\\DB-Schema-Export-Tool\\DB_Schema_Export_Tool.csproj",
       "packagesPath": "C:\\Users\\ThinkDBA\\.nuget\\packages\\",
       "outputPath": "D:\\github\\DB-Schema-Export-Tool\\obj\\",
       "projectStyle": "PackageReference",
