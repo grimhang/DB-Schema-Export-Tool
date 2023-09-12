@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pv/F1h7QUtugNjfYU2WUKEQmho3ZgCcHYr6bIPLKQyIrdlHgrvhhxPYsWHSufD2gaRNo87K41GkTC+mj6aZp3Q==",
+  "dgSpecHash": "/Ss9r/zqa7KO1bvzrGinB4vS2WCQh/THCXTwU/Zdnsq5XGpS2yXLmr4f3inEI6AiddPjmVBb/ESzsIvtT4O/Kg==",
   "success": true,
-  "projectFilePath": "D:\\github\\DB-Schema-Export-Tool\\DB_Schema_Export_Tool.csproj",
+  "projectFilePath": "D:\\github\\DB-Schema-Export-Tool\\DB_Schema_Export_Tool_Console.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ThinkDBA\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\ThinkDBA\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

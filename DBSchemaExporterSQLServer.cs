@@ -659,18 +659,24 @@ namespace DB_Schema_Export_Tool
                 ShowTrace("Exporting non built-in schemas and roles");
 
                 var scriptInfo = CleanSqlScript(StringCollectionToList(currentDatabase.Script(scriptOptions)));
-                //WriteTextToFile(workingParams.OutputDirectory, DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo);
+                //WriteTextToFile(workingParams.OutputDirectory, DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo); //박성출 주석 붙임
+
+                #region 박성출이추가한 부분
                 WriteTextToFile(workingParams.OutputDirectory, "01_" + DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo);
 
                 // 내가 추가
-                foreach (Schema schema in currentDatabase.Schemas)
+                /*foreach (Schema schema in currentDatabase.Schemas)
                 {
-                    scriptInfo = CleanSqlScript(StringCollectionToList(schema.Script(scriptOptions)));
-                    WriteTextToFile(workingParams.OutputDirectory, "02_" + DB_DEFINITION_FILE_PREFIX + schema.Name, scriptInfo);
-                }
-                
-                
-                
+                    if (!CheckDefaultSchema(schema.Name))
+                    {
+                        scriptInfo = CleanSqlScript(StringCollectionToList(schema.Script(scriptOptions)));
+                        WriteTextToFile(workingParams.OutputDirectory, "02_" + DB_DEFINITION_FILE_PREFIX + schema.Name, scriptInfo);
+                    }                    
+                } */
+                #endregion
+
+
+
             }
             catch (Exception ex)
             {
@@ -681,7 +687,8 @@ namespace DB_Schema_Export_Tool
 
             workingParams.ProcessCount++;
 
-            if (SqlServer2005OrNewer(currentDatabase))
+            bool isWriteOneFile = true;
+            if (SqlServer2005OrNewer(currentDatabase))  // schema 스크립팅 시작
             {
                 for (var index = 0; index < currentDatabase.Schemas.Count; index++)
                 {
@@ -696,7 +703,15 @@ namespace DB_Schema_Export_Tool
 
                         var scriptInfo = CleanSqlScript(StringCollectionToList(currentDatabase.Schemas[index].Script(scriptOptions)));
 
-                        WriteTextToFile(workingParams.OutputDirectory, "Schema_" + currentDatabase.Schemas[index].Name, scriptInfo);
+                        if (isWriteOneFile)
+                        {
+                            WriteTextToFileChool(workingParams.OutputDirectory, "02_" + "Schema_" + currentDatabase.Name, scriptInfo);
+                        }
+                        else
+                        {
+                            WriteTextToFile(workingParams.OutputDirectory, "02_" + "Schema_" + currentDatabase.Schemas[index].Name, scriptInfo);
+                        }
+                        
                     }
                     catch (Exception ex)
                     {
@@ -3146,6 +3161,23 @@ namespace DB_Schema_Export_Tool
         protected override bool ValidServerConnection()
         {
             return mConnectedToServer && mSqlServer?.State == SqlSmoState.Existing;
+        }
+
+        private bool CheckDefaultSchema(string schemaName)
+        {
+            if (schemaName == "dbo" || schemaName == "db_accessadmin" || schemaName == "db_backupoperator"
+                        || schemaName == "db_datareader" || schemaName == "db_datawriter" || schemaName == "db_ddladmin"
+                        || schemaName == "db_denydatareader" || schemaName == "db_denydatawriter" || schemaName == "db_owner"
+                        || schemaName == "db_securityadmin" || schemaName == "guest" || schemaName == "INFORMATION_SCHEMA"
+                        || schemaName == "sys")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
     }
 }

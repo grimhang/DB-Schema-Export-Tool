@@ -2431,5 +2431,57 @@ namespace DB_Schema_Export_Tool
 
             return true;
         }
+
+        /// <summary>
+        /// Write lines text to a file
+        /// </summary>
+        /// <param name="outputDirectory"></param>
+        /// <param name="objectName"></param>
+        /// <param name="scriptInfo"></param>
+        /// <param name="autoAddGoStatements"></param>
+        /// <param name="fileExtension"></param>
+        /// <returns>True if success, false if an error</returns>
+        protected bool WriteTextToFileChool(
+            FileSystemInfo outputDirectory,
+            string objectName,
+            IEnumerable<string> scriptInfo,
+            bool autoAddGoStatements = true,
+            string fileExtension = ".sql")
+        {
+            var outFilePath = "??";
+
+            try
+            {
+                // Make sure objectName doesn't contain any invalid characters
+                var cleanName = CleanNameForOS(objectName);
+                outFilePath = Path.Combine(outputDirectory.FullName, cleanName + fileExtension);
+
+                FileStream fs;
+
+                if (File.Exists(outFilePath))
+                    fs = new FileStream(outFilePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                else
+                    fs = new FileStream(outFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+
+                using var writer = new StreamWriter(fs);
+
+                foreach (var item in scriptInfo)
+                {
+                    writer.WriteLine(item);
+
+                    if (autoAddGoStatements)
+                    {
+                        writer.WriteLine("GO");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SetLocalError(DBSchemaExportErrorCodes.OutputDirectoryAccessError, "Error creating file " + outFilePath, ex);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
