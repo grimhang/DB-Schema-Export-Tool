@@ -24,6 +24,12 @@ program.cs
 									ExportDBObjectsUsingSMO
 										AutoSelectTablesForDataExport()
 											ExportDBObjectsUsingSMO()
+												ExportDBObjectsWork()
+													ExportDBSchemasAndRoles()
+														데이터베이스, 스키마, 롤을 export
+													ExportDBTables()
+														
+													
 			GetSelectedTableNamesForDataExport()							-- 선택한 테이블 리스트
 			StoreTableNamesToAutoExportData									-- 902 Line
 				StoreTableNameRegexToAutoExportData							-- DBSchemaExportTool.cs

@@ -626,6 +626,8 @@ namespace DB_Schema_Export_Tool
             ScriptingOptions scriptOptions,
             WorkingParams workingParams)
         {
+            bool isWriteOneFile = true; // 한파일에 쓰기 박성출 추가
+
             if (workingParams.CountObjectsOnly)
             {
                 ShowTrace("Counting non built-in schemas and roles");
@@ -654,7 +656,8 @@ namespace DB_Schema_Export_Tool
                 return true;
             }
 
-            try  // Database 스크립팅 시작
+            // Database 스크립팅 시작
+            try
             {
                 ShowTrace("Exporting non built-in schemas and roles");
 
@@ -687,8 +690,9 @@ namespace DB_Schema_Export_Tool
 
             workingParams.ProcessCount++;
 
-            bool isWriteOneFile = true;
-            if (SqlServer2005OrNewer(currentDatabase))  // schema 스크립팅 시작
+            
+            // schema 스크립팅 시작
+            if (SqlServer2005OrNewer(currentDatabase))
             {
                 for (var index = 0; index < currentDatabase.Schemas.Count; index++)
                 {
@@ -730,6 +734,7 @@ namespace DB_Schema_Export_Tool
                 }
             }
 
+            // Role 스크립팅 시작
             for (var index = 0; index < currentDatabase.Roles.Count; index++)
             {
                 if (!ExportRole(currentDatabase.Roles[index]))
@@ -738,7 +743,15 @@ namespace DB_Schema_Export_Tool
                 try
                 {
                     var scriptInfo = CleanSqlScript(StringCollectionToList(currentDatabase.Roles[index].Script(scriptOptions)));
-                    WriteTextToFile(workingParams.OutputDirectory, "Role_" + currentDatabase.Roles[index].Name, scriptInfo);
+
+                    if (isWriteOneFile)
+                    {
+                        WriteTextToFileChool(workingParams.OutputDirectory, "03_" + "Role__" + currentDatabase.Name, scriptInfo);
+                    }
+                    else
+                    {
+                        WriteTextToFile(workingParams.OutputDirectory, "03_" + "Role__" + currentDatabase.Roles[index].Name, scriptInfo);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -3163,7 +3176,7 @@ namespace DB_Schema_Export_Tool
             return mConnectedToServer && mSqlServer?.State == SqlSmoState.Existing;
         }
 
-        private bool CheckDefaultSchema(string schemaName)
+        /*private bool CheckDefaultSchema(string schemaName)
         {
             if (schemaName == "dbo" || schemaName == "db_accessadmin" || schemaName == "db_backupoperator"
                         || schemaName == "db_datareader" || schemaName == "db_datawriter" || schemaName == "db_ddladmin"
@@ -3178,6 +3191,6 @@ namespace DB_Schema_Export_Tool
                 return false;
             }
             
-        }
+        }*/
     }
 }
