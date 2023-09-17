@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.SqlServer.Management.Common;
@@ -61,6 +62,8 @@ namespace DB_Schema_Export_Tool
         private Scripter mTableDataScripter;
 
         private bool mTableDataScripterInitialized;
+
+        bool isWriteOneFile = true; // 한파일에 쓰기 박성출 추가
 
         /// <summary>
         /// Constructor
@@ -626,7 +629,7 @@ namespace DB_Schema_Export_Tool
             ScriptingOptions scriptOptions,
             WorkingParams workingParams)
         {
-            bool isWriteOneFile = true; // 한파일에 쓰기 박성출 추가
+
 
             if (workingParams.CountObjectsOnly)
             {
@@ -665,21 +668,8 @@ namespace DB_Schema_Export_Tool
                 //WriteTextToFile(workingParams.OutputDirectory, DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo); //박성출 주석 붙임
 
                 #region 박성출이추가한 부분
-                WriteTextToFile(workingParams.OutputDirectory, "01_" + DB_DEFINITION_FILE_PREFIX + currentDatabase.Name, scriptInfo);
-
-                // 내가 추가
-                /*foreach (Schema schema in currentDatabase.Schemas)
-                {
-                    if (!CheckDefaultSchema(schema.Name))
-                    {
-                        scriptInfo = CleanSqlScript(StringCollectionToList(schema.Script(scriptOptions)));
-                        WriteTextToFile(workingParams.OutputDirectory, "02_" + DB_DEFINITION_FILE_PREFIX + schema.Name, scriptInfo);
-                    }                    
-                } */
+                WriteTextToFile(workingParams.OutputDirectory, MsSqlCommon.Prefix_Database + "__" + currentDatabase.Name, scriptInfo);
                 #endregion
-
-
-
             }
             catch (Exception ex)
             {
@@ -690,7 +680,7 @@ namespace DB_Schema_Export_Tool
 
             workingParams.ProcessCount++;
 
-            
+
             // schema 스크립팅 시작
             if (SqlServer2005OrNewer(currentDatabase))
             {
@@ -715,7 +705,7 @@ namespace DB_Schema_Export_Tool
                         {
                             WriteTextToFile(workingParams.OutputDirectory, "02_" + "Schema_" + currentDatabase.Schemas[index].Name, scriptInfo);
                         }
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -821,7 +811,15 @@ namespace DB_Schema_Export_Tool
                 };
 
                 var scriptInfo = CleanSqlScript(StringCollectionToList(scripter.Script(smoObjectArray)));
-                WriteTextToFile(workingParams.OutputDirectory, databaseTable.Name, scriptInfo);
+
+                if (isWriteOneFile)
+                {
+                    WriteTextToFileChool(workingParams.OutputDirectory, MsSqlCommon.Prefix_Table + "__" + currentDatabase.Name, scriptInfo);
+                }
+                else
+                {
+                    WriteTextToFile(workingParams.OutputDirectory, databaseTable.Name, scriptInfo);
+                }
 
                 tableExportCount++;
                 workingParams.ProcessCount++;
@@ -1172,7 +1170,53 @@ namespace DB_Schema_Export_Tool
                                     };
 
                                     var scriptInfo = CleanSqlScript(StringCollectionToList(scripter.Script(smoObjectArray)));
-                                    WriteTextToFile(workingParams.OutputDirectory, objectName, scriptInfo);
+
+                                    if (objectIterator == 0)    // view
+                                    {
+                                        if (isWriteOneFile)
+                                        {
+                                            WriteTextToFileChool(workingParams.OutputDirectory, MsSqlCommon.Prefix_View + "__" + currentDatabase.Name, scriptInfo);
+                                        }
+                                        else
+                                        {
+                                            WriteTextToFile(workingParams.OutputDirectory, MsSqlCommon.Prefix_View + "__" + objectName, scriptInfo);
+                                        }
+                                    }
+                                    else if (objectIterator == 1)  // stored procedure
+                                    {
+                                        if (isWriteOneFile)
+                                        {
+                                            WriteTextToFileChool(workingParams.OutputDirectory, MsSqlCommon.Prefix_Proc + "__" + currentDatabase.Name, scriptInfo);
+                                        }
+                                        else
+                                        {
+                                            WriteTextToFile(workingParams.OutputDirectory, MsSqlCommon.Prefix_Proc + "__" + objectName, scriptInfo);
+                                        }
+
+                                    }
+                                    else if (objectIterator == 2)  // user defined function
+                                    {
+                                        if (isWriteOneFile)
+                                        {
+                                            WriteTextToFileChool(workingParams.OutputDirectory, MsSqlCommon.Prefix_Function + "__" + currentDatabase.Name, scriptInfo);
+                                        }
+                                        else
+                                        {
+                                            WriteTextToFile(workingParams.OutputDirectory, MsSqlCommon.Prefix_Function + "__" + objectName, scriptInfo);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        if (isWriteOneFile)
+                                        {
+                                            WriteTextToFileChool(workingParams.OutputDirectory, MsSqlCommon.Prefix_Etc + "__" + currentDatabase.Name, scriptInfo);
+                                        }
+                                        else
+                                        {
+                                            WriteTextToFile(workingParams.OutputDirectory, MsSqlCommon.Prefix_Etc + "__" + objectName, scriptInfo);
+                                        }
+                                    }
                                 }
                             }
                         }

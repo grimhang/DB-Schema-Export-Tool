@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchemaExportOptions.cs" />
     <Compile Include="ServerConnectionInfo.cs" />
+    <Compile Include="MsSqlCommon.cs" />
     <Compile Include="TableDataExportInfo.cs" />
     <Compile Include="WorkingParams.cs" />
     <Compile Include="frmMain.cs">
